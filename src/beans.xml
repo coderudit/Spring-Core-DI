@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd"> <!-- bean definitions here -->
+
+	<bean id="loggerConfig" class="com.coachsuggest.app.LoggerConfig"
+		init-method="initLogger">
+		<property name="rootLoggerLevel" value="FINE" />
+		<property name="printedLoggerLevel" value="FINE" />
+	</bean>
+
+	<bean id="myFortuneService"
+		class="com.coachsuggest.app.HappyFortuneService"></bean>
+		
+	<!-- Constructor injection -->
+	<bean id="myCoach" class="com.coachsuggest.app.BaseballCoach">
+		<constructor-arg ref="myFortuneService"></constructor-arg>
+	</bean>
+
+	<!-- Loads the properties file -->
+	<context:property-placeholder
+		location="classpath:sport.properties" />
+		
+    <!-- Setter injection -->
+	<bean id="myCricketCoach"
+		class="com.coachsuggest.app.CricketCoach">
+		<property name="fortuneService" ref="myFortuneService"></property>
+		<!-- <property name="emailAddress" value="abc@gmail.com"></property> <property 
+			name="team" value="Royals"></property> -->
+		<property name="emailAddress" value="${cricket.team}"></property>
+		<property name="team" value="${cricket.emailAddress}"></property>
+	</bean>
+
+	<!-- Bean custom processor to handle calling destroy methods on prototype 
+		scoped beans -->
+	<bean id="myCustomProcessor"
+		class="com.coachsuggest.app.CustomBeanProcessor">
+	</bean>
+
+	<bean id="myFootballCoach"
+		class="com.coachsuggest.app.FootballCoach" scope="prototype"
+		init-method="doMyStartupStuff" destroy-method="destroy">
+		<constructor-arg ref="myFortuneService"></constructor-arg>
+	</bean>
+
+</beans>
