@@ -2,6 +2,7 @@ package com.coachsuggest.app;
 
 import org.springframework.beans.factory.DisposableBean;
 
+//Demos
 public class FootballCoach implements Coach, DisposableBean {
 	private IFortuneService fortuneService;
 
@@ -26,6 +27,10 @@ public class FootballCoach implements Coach, DisposableBean {
 
 	public void doMyStartupStuff() {
 		System.out.println("I am called to do startup stuff.");
+	}
+	
+	public void doMyCleanupStuff() {
+		System.out.println("I am called to do cleanup stuff.");
 	}
 	
 	@Override
